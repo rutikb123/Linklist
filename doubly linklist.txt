@@ -1,0 +1,170 @@
+// Doubly linked list is a complex type of linked list in which a node contains a pointer to the previous
+// as well as the next node in the sequence. Therefore, in a doubly linked list, a node consists of three parts: node data,
+// pointer to the next node in sequence (next pointer) , pointer to the previous node (previous pointer).
+
+
+#include<iostream>
+using namespace std;
+
+// creating a linklist node
+
+class Node{
+    public:
+    int data;
+    Node* pri;
+    Node* next;
+
+    // constructor
+
+    Node(int data){
+        this->data = data;
+        this->pri = NULL;
+        this->next = NULL;
+    }
+   // destructor
+    ~Node(){
+        int val = this->data;
+        if(next != NULL){
+            next = NULL;
+            delete next;
+        }
+    }
+};
+
+// inserting node at the front of the link list
+
+void insert_at_head(Node* &head ,Node* &tail, int data){
+    if(head == NULL){
+        Node *temp = new Node(data);
+        head = temp;
+        tail = temp;
+    }
+    else{
+        Node *temp = new Node(data);
+        temp->next = head;
+        head = temp;
+    }
+
+}
+
+// inserting node at the end of the link list
+
+void insert_at_tail(Node* &tail , Node* &head, int data){
+    if(head == NULL){
+        Node* temp = new Node(data);
+        tail = temp;
+        head = temp;
+    }
+
+    else{
+        Node *temp = new Node(data);
+        tail->next = temp;
+        temp->pri = tail;
+        tail = temp;
+    }
+}
+// inserting node at any position of the link list
+
+void insert_at_any(Node* &head , Node* &tail, int pos , int data){
+    Node* temp = head;
+
+    if(pos == 1){
+        insert_at_head(head , tail, data);
+        return;
+    }
+
+    int cnt = 1;
+    while(cnt<pos-1){
+        temp = temp->next;
+        cnt++;
+      
+    }
+    if(temp->next == NULL){
+        insert_at_tail(tail,head, data);
+        return;
+    }
+
+   Node *newNode = new Node(data);
+
+   newNode->next = temp->next;
+   temp->next->pri = newNode;
+   temp->next = newNode;
+   newNode->pri = temp;
+
+}
+
+// deleting a node from linklist
+
+void deleteNode(Node* &head , Node* &tail, int pos){
+
+    // if deleting node is a head node 
+
+    if(pos == 1){
+        Node*temp = head;
+       temp->next->pri =NULL;
+       head = temp->next;
+       temp->next = NULL;
+       delete temp;
+    }
+
+    // other than head node
+
+    else{
+        Node *curr = head;
+        Node* priv = NULL;
+        int cnt = 1;
+
+        while(cnt<pos){
+            priv = curr;
+            curr = curr->next;
+            cnt++;
+        }
+        if(curr->next == NULL){
+            tail = priv;
+        }
+        curr->pri = NULL;
+        priv->next = curr->next;
+        curr->next = NULL;
+
+        delete curr;
+        
+
+        delete curr;
+    }
+}
+
+// printing linklist
+
+void print(Node* &head ){
+    while(head != NULL){
+        cout<<head->data<<endl;
+        head = head->next;
+    }
+}
+
+
+
+int main(){
+ Node *head = NULL;
+ Node* tail = NULL;
+
+insert_at_tail(tail , head ,10);
+insert_at_tail(tail , head ,20);
+insert_at_tail(tail , head ,30);
+insert_at_tail(tail , head ,40);
+
+// insert_at_any(head,tail,1,10);
+// insert_at_any(head,tail,2,20);
+// insert_at_any(head,tail,3,30);
+// insert_at_any(head,tail,4,40);
+insert_at_any(head,tail,5,5);
+
+
+
+deleteNode(head ,tail ,5);
+
+cout<<endl<<"the head is " <<head->data<<" " <<" the tail is "<<tail->data<<endl;
+ print(head);
+ 
+    return 0;
+}
