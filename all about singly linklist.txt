@@ -1,0 +1,188 @@
+
+CODE BY RUTIK....
+// all about singly linklist
+
+// A linked list is a linear data structure that stores a collection of data elements dynamically.
+// Nodes represent those data elements, and links or pointers connect each node.
+// Each node consists of two fields, the information stored in a linked list and a pointer that stores the address of its next node.
+// The last node contains null in its second field because it will point to no node.
+// A linked list can grow and shrink its size, as per the requirement.
+// It does not waste memory space.
+// There are four key types of linked lists:
+  //  1)   Singly linked lists
+ //  2)     Doubly linked lists
+  //  3)   Circular linked lists
+  // 4)   Circular doubly linked lists
+
+// A singly linked list is a type of linked list that is unidirectional, that is, it can be traversed in only  // one direction from head to the last node (tail).
+Each element in a linked list is called a node. A single node contains data and a pointer to the next node which helps in maintaining the structure of the list.
+
+ 
+
+#include<iostream>
+using namespace std;
+
+//creating a class Node
+
+class Node{
+    public:
+    int data;
+    Node* pri;
+    Node* next;
+
+    //constructor
+
+    Node(int data){
+        this->data = data;
+        this->pri = NULL;
+        this->next = NULL;
+    }
+
+    // destructor
+
+    ~Node(){
+        int val = this->data;
+        if(next != NULL){
+            next = NULL;
+            delete next;
+        }
+    }
+};
+
+// insertion of node at the front of link list
+
+void insert_at_head(Node* &head ,Node* &tail, int data){
+    if(head == NULL){
+        Node *temp = new Node(data);
+        head = temp;
+        tail = temp;
+    }
+    else{
+        Node *temp = new Node(data);
+        temp->next = head;
+        head = temp;
+    }
+
+}
+
+// insertion of node at the last of link list
+
+void insert_at_tail(Node* &tail , Node* &head, int data){
+    if(head == NULL){
+        Node* temp = new Node(data);
+        tail = temp;
+        head = temp;
+    }
+
+    else{
+        Node *temp = new Node(data);
+        tail->next = temp;
+        temp->pri = tail;
+        tail = temp;
+    }
+}
+
+// insertion of node at the end of the link list
+
+void insert_at_any(Node* &head , Node* &tail, int pos , int data){
+    Node* temp = head;
+
+    if(pos == 1){
+        insert_at_head(head , tail, data);
+        return;
+    }
+
+    int cnt = 1;
+    while(cnt<pos-1){
+        temp = temp->next;
+        cnt++;
+      
+    }
+    if(temp->next == NULL){
+        insert_at_tail(tail,head, data);
+        return;
+    }
+
+   Node *newNode = new Node(data);
+
+   newNode->next = temp->next;
+   temp->next->pri = newNode;
+   temp->next = newNode;
+   newNode->pri = temp;
+
+}
+// deleting node from link list 
+
+void deleteNode(Node* &head , Node* &tail, int pos){
+
+    // if delete node is head node
+
+    if(pos == 1){
+        Node*temp = head;
+       temp->next->pri =NULL;
+       head = temp->next;
+       temp->next = NULL;
+       delete temp;
+    }
+
+    //deleting middle or end node
+
+    else{
+        Node *curr = head;
+        Node* priv = NULL;
+        int cnt = 1;
+
+        while(cnt<pos){
+            priv = curr;
+            curr = curr->next;
+            cnt++;
+        }
+        if(curr->next == NULL){
+            tail = priv;
+        }
+        curr->pri = NULL;
+        priv->next = curr->next;
+        curr->next = NULL;
+
+        delete curr;
+        
+
+        delete curr;
+    }
+}
+
+// printing the link list
+
+void print(Node* &head ){
+    while(head != NULL){
+        cout<<head->data<<endl;
+        head = head->next;
+    }
+}
+
+
+
+int main(){
+ Node *head = NULL;
+ Node* tail = NULL;
+
+insert_at_tail(tail , head ,10);
+insert_at_tail(tail , head ,20);
+insert_at_tail(tail , head ,30);
+insert_at_tail(tail , head ,40);
+
+// insert_at_any(head,tail,1,10);
+// insert_at_any(head,tail,2,20);
+// insert_at_any(head,tail,3,30);
+// insert_at_any(head,tail,4,40);
+insert_at_any(head,tail,5,5);
+
+
+
+deleteNode(head ,tail ,5);
+
+cout<<endl<<"the head is " <<head->data<<" " <<" the tail is "<<tail->data<<endl;
+ print(head);
+ 
+    return 0;
+}
