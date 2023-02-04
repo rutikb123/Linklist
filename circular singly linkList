@@ -1,1 +1,147 @@
 
+// CODE BY RUTIK ..........
+
+// The circular linked list is a linked list where all nodes are connected to form a circle.
+// In a circular linked list, the first node and the last node are connected to each other which forms a circle. There is no NULL at the end.
+
+#include <iostream>
+using namespace std;
+
+// Creating class node
+
+class Node
+{
+public:
+    int data;
+    Node *next = NULL;
+
+    // constructor
+
+    Node(int data)
+    {
+        this->data = data;
+        this->next = NULL;
+    }
+    // destructor
+    ~Node()
+    {
+        int val = this->data;
+        if (next != NULL)
+        {
+            next = NULL;
+            delete next;
+        }
+    }
+};
+
+// insertion of node in singly circular linklist
+
+void insertNode(Node *&tail, int element, int data)
+{
+    // if list is empty
+
+    if (tail == NULL)
+    {
+
+        Node *newNode = new Node(data);
+        tail = newNode;
+        newNode->next = newNode;
+    }
+
+    // if list cantain more than one element
+
+    else
+    {
+        Node *temp = tail;
+
+        while (temp->data != element)
+        {
+            temp = temp->next;
+        }
+
+        Node *newNode = new Node(data);
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+}
+
+// traversing singly circular linklist or printinng  singly circular linklist
+
+void printList(Node *&tail)
+{
+    // list is empty
+    if (tail == NULL)
+    {
+        cout << "list is empty " << endl;
+    }
+
+    else
+    {
+
+        Node *temp = tail;
+        do
+        {
+            cout << tail->data << endl;
+            tail = tail->next;
+        } while (tail != temp);
+    }
+}
+
+// deleting node from singly circular linklist
+
+void deleteNode(Node *&tail, int element)
+{
+
+    // if list is empty
+
+    if (tail == NULL)
+    {
+
+        cout << "You can not delete element because your list is empty " << endl;
+    }
+    // if list is not empty
+    else
+    {
+
+        Node *priv = tail;
+        Node *curr = priv->next;
+
+        while (curr->data != element)
+        {
+            priv = curr;
+            curr = curr->next;
+        }
+        priv->next = curr->next;
+        // if list cantain only one node
+        if (curr == priv)
+        {
+            tail = NULL;
+        }
+        // if list cantain more than one node
+        else if (tail == curr)
+        {
+            tail = priv;
+        }
+
+        curr->next = NULL;
+        delete curr;
+    }
+}
+
+int main()
+{
+
+    Node *tail = NULL;
+
+    insertNode(tail, 5, 5);
+    insertNode(tail, 5, 10);
+    insertNode(tail, 10, 15);
+    insertNode(tail, 15, 20);
+    insertNode(tail, 15, 17);
+
+    deleteNode(tail, 5);
+
+    printList(tail);
+
+    return 0;
+}
